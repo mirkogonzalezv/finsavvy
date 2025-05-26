@@ -43,4 +43,5 @@ Proyecto portafolio para gestión financiera de caracter publico.
 - go_router # manejo de rutas
 - flutter_bloc # gestión de estados
 - equatable # manejo de modelos de datos y estados
-- Hive # almacenamiento local
+- Isar # almacenamiento local
+- Firebase Store # Almacenamiento remoto
