@@ -1,16 +1,39 @@
-# finsavvy
+# Finsavvy
 
-A new Flutter project.
+Proyecto portafolio para gestión financiera de caracter publico.
 
-## Getting Started
+# Fase 1.
 
-This project is a starting point for a Flutter application.
+- Registro/Login con email o google (Firebase)
+- Panel de gastos e ingresos
+- Clasificación automática de gastos por categoría
+- Estadísticas con gráficos (mensuales, anuales)
+- Sugerencias inteligentes (IA) para mejorar finanzas
+- Meta financiera (ahorro, objetivos)
+- Alerta de gastos inusuales
+- Modo oscuro y responsive.
 
-A few resources to get you started if this is your first Flutter project:
+# Stack Tecnológico recomendado
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+| Componente    | Tecnología                                 |
+| ------------- | ------------------------------------------ |
+| Frontend      | Flutter                                    |
+| Backend       | Nestjs                                     |
+| Base de datos | Firebase Firestore o Supabase (PostgreSQL) |
+| AI            | Gemini API                                 |
+| Auth          | Firebase Auth o Supabase Auth              |
+| Hosting       | Firebase Functions / Supabase Edge         |
+| Analytics     | Firebase Analytics                         |
+| Storage       | Supabase Storage /Firebase Storage         |
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# UI/UX Mockup (Pantallas Clave)
+
+- Pantalla de Inicio + Onboarding
+- Login / Registro
+- Dashboard Financiero
+  - Balance mensual
+  - Gastos por categoría
+  - Meta actual
+- Formulario de nuevo gasto/ingreso
+- Pantalla de IA - Sugerencias y predicciones
+- Configuración de usuario y alertas
