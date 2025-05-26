@@ -15,16 +15,16 @@ Proyecto portafolio para gestión financiera de caracter publico.
 
 # Stack Tecnológico recomendado
 
-| Componente    | Tecnología                                 |
-| ------------- | ------------------------------------------ |
-| Frontend      | Flutter                                    |
-| Backend       | Nestjs                                     |
-| Base de datos | Firebase Firestore o Supabase (PostgreSQL) |
-| AI            | Gemini API                                 |
-| Auth          | Firebase Auth o Supabase Auth              |
-| Hosting       | Firebase Functions / Supabase Edge         |
-| Analytics     | Firebase Analytics                         |
-| Storage       | Supabase Storage /Firebase Storage         |
+| Componente    | Tecnología         |
+| ------------- | ------------------ |
+| Frontend      | Flutter            |
+| Backend       | Nestjs             |
+| Base de datos | Firebase Firestore |
+| AI            | Gemini API         |
+| Auth          | Firebase Auth      |
+| Hosting       | Firebase Functions |
+| Analytics     | Firebase Analytics |
+| Storage       | Firebase Storage   |
 
 # UI/UX Mockup (Pantallas Clave)
 
@@ -37,3 +37,10 @@ Proyecto portafolio para gestión financiera de caracter publico.
 - Formulario de nuevo gasto/ingreso
 - Pantalla de IA - Sugerencias y predicciones
 - Configuración de usuario y alertas
+
+# Plugins utilizados
+
+- go_router # manejo de rutas
+- flutter_bloc # gestión de estados
+- equatable # manejo de modelos de datos y estados
+- Hive # almacenamiento local
