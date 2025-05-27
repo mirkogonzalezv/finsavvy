@@ -1,5 +1,7 @@
+import 'package:finsavvy/firebase_options.dart';
 import 'package:finsavvy/models/user_local.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,6 +14,7 @@ Future<void> init() async {
   final dir = await getApplicationDocumentsDirectory();
 
   // Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
 
   // Isar

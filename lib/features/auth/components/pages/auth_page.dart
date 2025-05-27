@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/consts/route_config.dart';
 import '../widgets/divider_auth_widget.dart';
 
 class AuthPage extends StatefulWidget {
@@ -54,8 +56,10 @@ class _AuthPageState extends State<AuthPage> {
                     const Center(child: CircularProgressIndicator.adaptive()),
               );
             }
-          } else {
-            Navigator.of(context, rootNavigator: true).pop();
+          }
+
+          if (state is AuthInitial) {
+            context.pop();
           }
 
           if (state is AuthErrorState) {
@@ -69,6 +73,7 @@ class _AuthPageState extends State<AuthPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Bienvenido ${state.user.email}!')),
             );
+            context.go(AppRouter.homePath);
           }
         },
         child: Container(
@@ -208,7 +213,7 @@ class _AuthPageState extends State<AuthPage> {
                             width: double.infinity,
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed('register');
+                                context.push(AppRouter.registerPath);
                               },
                               child: Text(
                                 'Registrar nueva cuenta',

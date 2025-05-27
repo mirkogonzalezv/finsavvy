@@ -26,3 +26,9 @@ final class AuthRegisterRequested extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+// events/auth_events.dart
+class AuthCheckRequested extends AuthEvent {
+  @override
+  List<Object> get props => [];
+}

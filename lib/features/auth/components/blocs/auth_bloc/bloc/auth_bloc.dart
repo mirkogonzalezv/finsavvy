@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:finsavvy/models/user_local.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +16,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       super(AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterAccount);
+    on<AuthCheckRequested>(_onAuthCheckRequested);
+
+    add(
+      AuthCheckRequested(),
+    ); // Ejecutamos AuthCheckRequest apenas inicie el BLoC
+  }
+
+  _onAuthCheckRequested(
+    AuthCheckRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoadingState());
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(AuthSuccessState(user));
+      } else {
+        emit(AuthInitial());
+      }
+    } catch (e) {
+      emit(AuthErrorState('Error verificando autenticación'));
+    }
   }
 
   _onLoginRequested(AuthLoginRequested event, Emitter<AuthState> emit) async {
@@ -34,19 +54,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (user != null) {
         _saveUserLocal(userCredential.user!);
-        emit(AuthSuccessState(user));
+        emit(AuthSuccessState(userCredential.user!));
       } else {
-        emit(AuthErrorState());
+        emit(AuthErrorState('Error al ingresar'));
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        log("Password muy debil");
-      } else if (e.code == 'email-already-in-use') {
-        log('El email ya existe en nuestros registros');
-      }
-      emit(AuthErrorState());
+      _getFirebaseErrorMessage(e);
+      emit(AuthErrorState(_getFirebaseErrorMessage(e)));
     } catch (_) {
-      emit(AuthErrorState());
+      emit(AuthErrorState(_getFirebaseErrorMessage('Error al ingresar')));
     }
   }
 
@@ -66,9 +82,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _saveUserLocal(userCredential.user!);
       emit(AuthSuccessState(userCredential.user!));
     } on FirebaseAuthException catch (e) {
-      log(e.code);
+      emit(AuthErrorState(_getFirebaseErrorMessage(e)));
     } catch (_) {
-      emit(AuthErrorState());
+      emit(AuthErrorState('Error al registrar'));
     }
   }
 
@@ -78,5 +94,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ..email = user.email
       ..lastLogin = DateTime.now();
     _isar.writeTxn(() => _isar.userLocals.put(userLocal));
+  }
+
+  String _getFirebaseErrorMessage(dynamic error) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'email-already-in-use':
+          return 'El correo ya está registrado';
+        case 'invalid-email':
+          return 'Correo electrónico inválido';
+        case 'operation-not-allowed':
+          return 'Operación no permitida';
+        case 'weak-password':
+          return 'Contraseña débil';
+        default:
+          return 'Error desconocido: ${error.code}';
+      }
+    }
+    return 'Error al registrar: ${error.toString()}';
   }
 }

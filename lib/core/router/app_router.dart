@@ -4,9 +4,29 @@ import 'package:finsavvy/features/auth/components/pages/register_page.dart';
 import 'package:finsavvy/features/dashboard/components/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/components/blocs/auth_bloc/bloc/auth_bloc.dart';
+import '../../infra/injector_container.dart';
+
 final routerApp = GoRouter(
-  initialLocation: AppRouter.authPath,
+  initialLocation: AppRouter.homePath,
   debugLogDiagnostics: true,
+  redirect: (context, state) async {
+    final authBloc = getIt<AuthBloc>();
+    final isLoggedIn = authBloc.state is AuthSuccessState;
+    final isAuthPage =
+        state.matchedLocation == AppRouter.authPath ||
+        state.matchedLocation == AppRouter.registerPath;
+
+    if (isLoggedIn && isAuthPage) {
+      return AppRouter.homePath;
+    }
+
+    if (!isLoggedIn && !isAuthPage) {
+      return AppRouter.authPath;
+    }
+
+    return null;
+  },
   routes: [
     GoRoute(
       path: AppRouter.homePath,
