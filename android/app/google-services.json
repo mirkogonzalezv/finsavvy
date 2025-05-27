@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "1042304724674",
+    "project_id": "finssavy",
+    "storage_bucket": "finssavy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042304724674:android:531165677e82043196155b",
+        "android_client_info": {
+          "package_name": "com.example.finsavvy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042304724674-6cjhbb1tireukqtb09k7vfc30c83nqu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMBRTARq-4rGLOT8XBPFNFlqCNkbYHIIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042304724674-6cjhbb1tireukqtb09k7vfc30c83nqu0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1042304724674-3tif9vos3co549h04kr1qoeltll8pc0h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.finsavvy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042304724674:android:37a9a1b688fbe06096155b",
+        "android_client_info": {
+          "package_name": "dev.mirkog.finsavvy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042304724674-6cjhbb1tireukqtb09k7vfc30c83nqu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMBRTARq-4rGLOT8XBPFNFlqCNkbYHIIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042304724674-6cjhbb1tireukqtb09k7vfc30c83nqu0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1042304724674-3tif9vos3co549h04kr1qoeltll8pc0h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.finsavvy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
