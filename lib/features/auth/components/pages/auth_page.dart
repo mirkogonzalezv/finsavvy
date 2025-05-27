@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../widgets/divider_auth_widget.dart';
+
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -201,23 +203,26 @@ class _AuthPageState extends State<AuthPage> {
                               ),
                             ),
                           ),
-
                           SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: Colors.white30)),
-                              Padding(
-                                padding: EdgeInsetsGeometry.symmetric(
-                                  horizontal: 12,
-                                ),
-                                child: Text(
-                                  'O',
-                                  style: TextStyle(color: Colors.white70),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('register');
+                              },
+                              child: Text(
+                                'Registrar nueva cuenta',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white60,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Expanded(child: Divider(color: Colors.white30)),
-                            ],
+                            ),
                           ),
+
+                          SizedBox(height: 16),
+                          DividerAuth(),
                           SizedBox(height: 16),
                           SizedBox(
                             width: double.infinity,

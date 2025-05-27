@@ -1,5 +1,6 @@
 import 'package:finsavvy/core/consts/route_config.dart';
 import 'package:finsavvy/features/auth/components/pages/auth_page.dart';
+import 'package:finsavvy/features/auth/components/pages/register_page.dart';
 import 'package:finsavvy/features/dashboard/components/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,6 +20,13 @@ final routerApp = GoRouter(
       name: AppRouter.authNamePath,
       builder: (context, state) {
         return AuthPage();
+      },
+    ),
+    GoRoute(
+      path: AppRouter.registerPath,
+      name: AppRouter.registerNamePath,
+      builder: (context, state) {
+        return RegisterPage();
       },
     ),
   ],
