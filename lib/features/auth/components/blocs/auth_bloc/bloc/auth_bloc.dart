@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -29,6 +31,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthErrorState());
       }
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        log("Password muy debil");
+      } else if (e.code == 'email-already-in-use') {
+        log('El email ya existe en nuestros registros');
+      }
       emit(AuthErrorState());
     } catch (_) {
       emit(AuthErrorState());
