@@ -4,7 +4,7 @@ import 'package:finsavvy/features/dashboard/components/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 final routerApp = GoRouter(
-  initialLocation: AppRouter.homePath,
+  initialLocation: AppRouter.authPath,
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
