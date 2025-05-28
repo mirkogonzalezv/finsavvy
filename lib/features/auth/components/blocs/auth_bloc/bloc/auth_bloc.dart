@@ -4,6 +4,7 @@ import 'package:finsavvy/models/user_local.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isar/isar.dart';
 
 part 'auth_event.dart';
@@ -20,8 +21,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(_onRegisterAccount);
     on<AuthExistCurrentAccount>(_onAccountExist);
     on<CloseSessionAccount>(_onCloseSession);
+    on<AuthWithGoogleAccount>(_authWithGoogleAccount);
 
     add(AuthExistCurrentAccount());
+  }
+
+  _authWithGoogleAccount(
+    AuthWithGoogleAccount event,
+    Emitter<AuthState> emit,
+  ) async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    final firebaseAuth = await FirebaseAuth.instance.signInWithCredential(
+      credential,
+    );
+
+    log("Login With Google");
+    log(firebaseAuth.toString());
+    log("Login With Google");
   }
 
   _onAccountExist(

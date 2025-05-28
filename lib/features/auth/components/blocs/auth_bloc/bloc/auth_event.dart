@@ -29,6 +29,12 @@ final class AuthRegisterRequested extends AuthEvent {
 
 final class AuthExistCurrentAccount extends AuthEvent {}
 
+final class AuthWithGoogleAccount extends AuthEvent {
+  const AuthWithGoogleAccount();
+  @override
+  List<Object> get props => [];
+}
+
 final class CloseSessionAccount extends AuthEvent {
   const CloseSessionAccount();
   @override

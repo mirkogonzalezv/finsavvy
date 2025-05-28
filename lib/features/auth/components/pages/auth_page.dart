@@ -226,6 +226,9 @@ class _AuthPageState extends State<AuthPage> {
                             child: OutlinedButton(
                               onPressed: () {
                                 // Firebase auth google
+                                context.read<AuthBloc>().add(
+                                  AuthWithGoogleAccount(),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(color: Colors.white70),
