@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:finsavvy/features/dashboard/components/widgets/account_menu_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,38 +17,7 @@ class MenuApp extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.7,
       child: Column(
         children: [
-          BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              if (state is AuthSuccessState) {
-                return UserAccountsDrawerHeader(
-                  accountName: Text(state.user.displayName!),
-                  accountEmail: Text(state.user.email!),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: state.user.photoURL != null
-                        ? ClipOval(
-                            child: Image.network(
-                              state.user.photoURL!,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Text(
-                            state.user.email?.substring(0, 1).toUpperCase() ??
-                                'U',
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                    ),
-                  ),
-                );
-              }
-
-              return SizedBox.shrink();
-            },
-          ),
+          AccountMenuHeader(),
           Expanded(
             child: ListView(
               children: [
