@@ -1,5 +1,7 @@
+import 'package:finsavvy/core/consts/route_config.dart';
 import 'package:finsavvy/core/consts/theme_consts.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -25,6 +27,17 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          iconSize: 32,
+          color: Colors.white,
+          onPressed: () {
+            context.go(AppRouter.authPath);
+          },
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -36,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -130,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor ingresa tu contraseña';
-                            } else if (value.length < 12) {
+                            } else if (value.length < 6) {
                               return 'La contraseña debe tener al menos 12 caracteres';
                             }
                             return null;
@@ -156,8 +169,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor ingresa tu contraseña';
-                            } else if (value.length < 12) {
+                            } else if (value.length < 6) {
                               return 'La contraseña debe tener al menos 12 caracteres';
+                            } else if (value !=
+                                _passwordController.text.trim()) {
+                              return 'Las contraseñas deben ser iguales';
                             }
                             return null;
                           },
