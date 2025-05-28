@@ -3,6 +3,7 @@
         android:label="finsavvy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,6 +21,9 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data
+                android:name="com.google.android.gms.security.ProviderInstaller"
+                android:value="com.google.android.gms" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

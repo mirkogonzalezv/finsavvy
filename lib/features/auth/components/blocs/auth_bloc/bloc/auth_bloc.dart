@@ -35,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthWithGoogleAccount event,
     Emitter<AuthState> emit,
   ) async {
+    emit(AuthLoadingState());
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
     if (googleUser == null) {
@@ -64,7 +65,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final currentUser = _firebaseAuth.currentUser;
 
       if (currentUser == null) {
+        await _clearLocalUser();
         return emit(AuthInitial());
+      }
+
+      final isGoogleUser = currentUser.providerData.any(
+        (userInfo) => userInfo.providerId == 'google.com',
+      );
+
+      if (isGoogleUser) {
+        try {
+          final token = await currentUser.getIdTokenResult(true);
+          if (token.token == null ||
+              token.expirationTime!.isBefore(DateTime.now())) {
+            await _forceSignOut();
+            return emit(AuthInitial());
+          }
+        } catch (e) {
+          await _forceSignOut();
+          return emit(AuthInitial());
+        }
       }
 
       final userLocal = await _isar.userLocals
@@ -137,11 +157,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   _onCloseSession(CloseSessionAccount event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
 
-    await _firebaseAuth.signOut();
-
-    await _clearLocalUser();
+    await _forceSignOut();
 
     emit(AuthInitial());
+  }
+
+  Future<void> _forceSignOut() async {
+    await _firebaseAuth.signOut();
+
+    await _googleSignIn.signOut();
+
+    await _clearLocalUser();
   }
 
   _saveUserLocal(User user) async {
