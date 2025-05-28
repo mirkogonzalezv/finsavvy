@@ -27,10 +27,6 @@ final class AuthRegisterRequested extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
-<<<<<<< HEAD
-// events/auth_events.dart
-class AuthCheckRequested extends AuthEvent {
-=======
 final class AuthExistCurrentAccount extends AuthEvent {}
 
 final class AuthWithGoogleAccount extends AuthEvent {
@@ -41,7 +37,6 @@ final class AuthWithGoogleAccount extends AuthEvent {
 
 final class CloseSessionAccount extends AuthEvent {
   const CloseSessionAccount();
->>>>>>> fix/ruta-register
   @override
   List<Object> get props => [];
 }

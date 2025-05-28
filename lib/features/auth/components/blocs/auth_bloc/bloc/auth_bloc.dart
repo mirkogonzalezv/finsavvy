@@ -71,7 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       return emit(AuthSuccessState(currentUser));
     } catch (e) {
-      return emit(AuthErrorState(e.toString()));
+      return emit(AuthErrorState(""));
     }
   }
 
@@ -89,15 +89,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (user != null) {
         _saveUserLocal(userCredential.user!);
-        emit(AuthSuccessState(userCredential.user!));
+        emit(AuthSuccessState(user));
       } else {
         emit(AuthInitial());
       }
     } on FirebaseAuthException catch (e) {
-      e;
+      if (e.code == 'weak-password') {
+        log("Password muy debil");
+      } else if (e.code == 'email-already-in-use') {
+        log('El email ya existe en nuestros registros');
+      }
       emit(AuthErrorState(""));
     } catch (_) {
-      emit(AuthErrorState('Error al ingresar'));
+      emit(AuthErrorState(""));
     }
   }
 
@@ -117,9 +121,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _saveUserLocal(userCredential.user!);
       emit(AuthSuccessState(userCredential.user!));
     } on FirebaseAuthException catch (e) {
-      emit(AuthErrorState(""));
+      log(e.code);
     } catch (_) {
-      emit(AuthErrorState('Error al registrar'));
+      emit(AuthErrorState(""));
     }
   }
 
