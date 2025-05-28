@@ -180,8 +180,8 @@ class _AuthPageState extends State<AuthPage> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Por favor ingresa tu contraseña';
-                              } else if (value.length < 12) {
-                                return 'La contraseña debe tener al menos 12 caracteres';
+                              } else if (value.length < 6) {
+                                return 'La contraseña debe tener al menos 6 caracteres';
                               }
                               return null;
                             },

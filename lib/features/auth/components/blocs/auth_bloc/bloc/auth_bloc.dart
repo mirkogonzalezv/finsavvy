@@ -66,7 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _saveUserLocal(userCredential.user!);
         emit(AuthSuccessState(user));
       } else {
-        emit(AuthErrorState());
+        emit(AuthInitial());
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
