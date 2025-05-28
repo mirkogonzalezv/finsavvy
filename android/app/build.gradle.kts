@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.finsavvy"
+    namespace = "dev.mirkog.finsavvy"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
@@ -34,11 +34,19 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../app/keystore/finsavvy_keystore")
+            storePassword = "Finsavvy2025._"
+            keyAlias = "finsavvy"
+            keyPassword = "Finsavvy2025._"
+        }
+    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

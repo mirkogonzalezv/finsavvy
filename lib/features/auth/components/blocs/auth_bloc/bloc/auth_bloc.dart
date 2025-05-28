@@ -13,10 +13,15 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _firebaseAuth;
   final Isar _isar;
-  AuthBloc({required FirebaseAuth firebaseAuth, required Isar isar})
-    : _firebaseAuth = firebaseAuth,
-      _isar = isar,
-      super(AuthInitial()) {
+  final GoogleSignIn _googleSignIn;
+  AuthBloc({
+    required FirebaseAuth firebaseAuth,
+    required Isar isar,
+    required GoogleSignIn googleSignIn,
+  }) : _firebaseAuth = firebaseAuth,
+       _isar = isar,
+       _googleSignIn = googleSignIn,
+       super(AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterAccount);
     on<AuthExistCurrentAccount>(_onAccountExist);
@@ -30,23 +35,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthWithGoogleAccount event,
     Emitter<AuthState> emit,
   ) async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    if (googleUser == null) {
+      emit(AuthInitial());
+      return;
+    }
+
+    final googleAuth = await googleUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
-    final firebaseAuth = await FirebaseAuth.instance.signInWithCredential(
-      credential,
-    );
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
 
-    log("Login With Google");
-    log(firebaseAuth.toString());
-    log("Login With Google");
+    await _saveUserLocal(userCredential.user!);
+
+    emit(AuthSuccessState(userCredential.user!));
   }
 
   _onAccountExist(

@@ -1,4 +1,4 @@
-package com.example.finsavvy
+package dev.mirkog.finsavvy
 
 import io.flutter.embedding.android.FlutterActivity
 
