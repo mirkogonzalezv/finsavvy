@@ -56,8 +56,6 @@ class _AuthPageState extends State<AuthPage> {
                     const Center(child: CircularProgressIndicator.adaptive()),
               );
             }
-          } else {
-            Navigator.of(context, rootNavigator: true).pop();
           }
 
           if (state is AuthErrorState) {
@@ -67,10 +65,7 @@ class _AuthPageState extends State<AuthPage> {
           }
 
           if (state is AuthSuccessState) {
-            // TODO: Ir a la siguiente vista despues del login
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Bienvenido ${state.user.email}!')),
-            );
+            context.go(AppRouter.homePath);
           }
         },
         child: Container(

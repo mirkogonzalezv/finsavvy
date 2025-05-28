@@ -18,6 +18,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       super(AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterAccount);
+    on<AuthExistCurrentAccount>(_onAccountExist);
+
+    add(AuthExistCurrentAccount());
+  }
+
+  _onAccountExist(
+    AuthExistCurrentAccount event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      final currentUser = _firebaseAuth.currentUser;
+
+      if (currentUser == null) {
+        return emit(AuthInitial());
+      }
+
+      final userLocal = await _isar.userLocals
+          .filter()
+          .uidEqualTo(currentUser.uid)
+          .findFirst();
+
+      if (userLocal == null) {
+        await _saveUserLocal(currentUser);
+      }
+
+      return emit(AuthSuccessState(currentUser));
+    } catch (e) {
+      return emit(AuthErrorState());
+    }
   }
 
   _onLoginRequested(AuthLoginRequested event, Emitter<AuthState> emit) async {
@@ -72,7 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  _saveUserLocal(User user) {
+  _saveUserLocal(User user) async {
     final userLocal = UserLocal()
       ..uid = user.uid
       ..email = user.email

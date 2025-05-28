@@ -26,3 +26,5 @@ final class AuthRegisterRequested extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+final class AuthExistCurrentAccount extends AuthEvent {}
