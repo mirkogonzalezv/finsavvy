@@ -15,6 +15,5 @@ class AppTheme {
     ),
     colorScheme: ColorScheme.fromSeed(seedColor: backgroundColor),
     primaryColor: primaryColor,
-    scaffoldBackgroundColor: backgroundColor,
   );
 }

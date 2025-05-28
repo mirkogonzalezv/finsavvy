@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:finsavvy/models/user_local.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isar/isar.dart';
 
 part 'auth_event.dart';
@@ -16,27 +19,59 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       super(AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterAccount);
-    on<AuthCheckRequested>(_onAuthCheckRequested);
+    on<AuthExistCurrentAccount>(_onAccountExist);
+    on<CloseSessionAccount>(_onCloseSession);
+    on<AuthWithGoogleAccount>(_authWithGoogleAccount);
 
-    add(
-      AuthCheckRequested(),
-    ); // Ejecutamos AuthCheckRequest apenas inicie el BLoC
+    add(AuthExistCurrentAccount());
   }
 
-  _onAuthCheckRequested(
-    AuthCheckRequested event,
+  _authWithGoogleAccount(
+    AuthWithGoogleAccount event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoadingState());
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    final firebaseAuth = await FirebaseAuth.instance.signInWithCredential(
+      credential,
+    );
+
+    log("Login With Google");
+    log(firebaseAuth.toString());
+    log("Login With Google");
+  }
+
+  _onAccountExist(
+    AuthExistCurrentAccount event,
+    Emitter<AuthState> emit,
+  ) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        emit(AuthSuccessState(user));
-      } else {
-        emit(AuthInitial());
+      final currentUser = _firebaseAuth.currentUser;
+
+      if (currentUser == null) {
+        return emit(AuthInitial());
       }
+
+      final userLocal = await _isar.userLocals
+          .filter()
+          .uidEqualTo(currentUser.uid)
+          .findFirst();
+
+      if (userLocal == null) {
+        await _saveUserLocal(currentUser);
+      }
+
+      return emit(AuthSuccessState(currentUser));
     } catch (e) {
-      emit(AuthErrorState('Error verificando autenticación'));
+      return emit(AuthErrorState(e.toString()));
     }
   }
 
@@ -56,13 +91,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _saveUserLocal(userCredential.user!);
         emit(AuthSuccessState(userCredential.user!));
       } else {
-        emit(AuthErrorState('Error al ingresar'));
+        emit(AuthInitial());
       }
     } on FirebaseAuthException catch (e) {
-      _getFirebaseErrorMessage(e);
-      emit(AuthErrorState(_getFirebaseErrorMessage(e)));
+      e;
+      emit(AuthErrorState(""));
     } catch (_) {
-      emit(AuthErrorState(_getFirebaseErrorMessage('Error al ingresar')));
+      emit(AuthErrorState('Error al ingresar'));
     }
   }
 
@@ -82,13 +117,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _saveUserLocal(userCredential.user!);
       emit(AuthSuccessState(userCredential.user!));
     } on FirebaseAuthException catch (e) {
-      emit(AuthErrorState(_getFirebaseErrorMessage(e)));
+      emit(AuthErrorState(""));
     } catch (_) {
       emit(AuthErrorState('Error al registrar'));
     }
   }
 
-  _saveUserLocal(User user) {
+  _onCloseSession(CloseSessionAccount event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+
+    await _firebaseAuth.signOut();
+
+    await _clearLocalUser();
+
+    emit(AuthInitial());
+  }
+
+  _saveUserLocal(User user) async {
     final userLocal = UserLocal()
       ..uid = user.uid
       ..email = user.email
@@ -96,21 +141,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _isar.writeTxn(() => _isar.userLocals.put(userLocal));
   }
 
-  String _getFirebaseErrorMessage(dynamic error) {
-    if (error is FirebaseAuthException) {
-      switch (error.code) {
-        case 'email-already-in-use':
-          return 'El correo ya está registrado';
-        case 'invalid-email':
-          return 'Correo electrónico inválido';
-        case 'operation-not-allowed':
-          return 'Operación no permitida';
-        case 'weak-password':
-          return 'Contraseña débil';
-        default:
-          return 'Error desconocido: ${error.code}';
-      }
-    }
-    return 'Error al registrar: ${error.toString()}';
+  _clearLocalUser() async {
+    await _isar.writeTxn(() async {
+      await _isar.userLocals.clear();
+    });
   }
 }

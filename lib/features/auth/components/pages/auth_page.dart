@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finsavvy/core/consts/route_config.dart';
 import 'package:finsavvy/core/consts/theme_consts.dart';
 import 'package:finsavvy/features/auth/components/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/consts/route_config.dart';
 import '../widgets/divider_auth_widget.dart';
 
 class AuthPage extends StatefulWidget {
@@ -58,10 +58,6 @@ class _AuthPageState extends State<AuthPage> {
             }
           }
 
-          if (state is AuthInitial) {
-            context.pop();
-          }
-
           if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Error al iniciar sesión')),
@@ -69,10 +65,6 @@ class _AuthPageState extends State<AuthPage> {
           }
 
           if (state is AuthSuccessState) {
-            // TODO: Ir a la siguiente vista despues del login
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Bienvenido ${state.user.email}!')),
-            );
             context.go(AppRouter.homePath);
           }
         },
@@ -188,8 +180,8 @@ class _AuthPageState extends State<AuthPage> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Por favor ingresa tu contraseña';
-                              } else if (value.length < 12) {
-                                return 'La contraseña debe tener al menos 12 caracteres';
+                              } else if (value.length < 6) {
+                                return 'La contraseña debe tener al menos 6 caracteres';
                               }
                               return null;
                             },
@@ -213,7 +205,7 @@ class _AuthPageState extends State<AuthPage> {
                             width: double.infinity,
                             child: OutlinedButton(
                               onPressed: () {
-                                context.push(AppRouter.registerPath);
+                                context.go(AppRouter.registerPath);
                               },
                               child: Text(
                                 'Registrar nueva cuenta',
@@ -234,6 +226,9 @@ class _AuthPageState extends State<AuthPage> {
                             child: OutlinedButton(
                               onPressed: () {
                                 // Firebase auth google
+                                context.read<AuthBloc>().add(
+                                  AuthWithGoogleAccount(),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(color: Colors.white70),
