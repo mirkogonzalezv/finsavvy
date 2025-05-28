@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:finsavvy/core/consts/route_config.dart';
 import 'package:finsavvy/core/consts/theme_consts.dart';
 import 'package:finsavvy/features/auth/components/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/divider_auth_widget.dart';
 
@@ -208,7 +210,7 @@ class _AuthPageState extends State<AuthPage> {
                             width: double.infinity,
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed('register');
+                                context.go(AppRouter.registerPath);
                               },
                               child: Text(
                                 'Registrar nueva cuenta',
