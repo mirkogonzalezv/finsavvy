@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterAccount);
     on<AuthExistCurrentAccount>(_onAccountExist);
+    on<CloseSessionAccount>(_onCloseSession);
 
     add(AuthExistCurrentAccount());
   }
@@ -101,11 +102,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  _onCloseSession(CloseSessionAccount event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+
+    await _firebaseAuth.signOut();
+
+    await _clearLocalUser();
+
+    emit(AuthInitial());
+  }
+
   _saveUserLocal(User user) async {
     final userLocal = UserLocal()
       ..uid = user.uid
       ..email = user.email
       ..lastLogin = DateTime.now();
     _isar.writeTxn(() => _isar.userLocals.put(userLocal));
+  }
+
+  _clearLocalUser() async {
+    await _isar.writeTxn(() async {
+      await _isar.userLocals.clear();
+    });
   }
 }

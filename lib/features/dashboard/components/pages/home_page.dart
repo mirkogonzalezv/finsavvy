@@ -7,13 +7,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.menu, color: Colors.white, size: 32),
-          ),
-        ],
+        backgroundColor: Colors.deepPurple,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      endDrawer: Drawer(
+        child: Column(children: [Container(color: Colors.red, height: 116)]),
       ),
       body: Center(child: Text('Home Page')),
     );

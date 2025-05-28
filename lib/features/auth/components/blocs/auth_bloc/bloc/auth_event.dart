@@ -28,3 +28,9 @@ final class AuthRegisterRequested extends AuthEvent {
 }
 
 final class AuthExistCurrentAccount extends AuthEvent {}
+
+final class CloseSessionAccount extends AuthEvent {
+  const CloseSessionAccount();
+  @override
+  List<Object> get props => [];
+}
