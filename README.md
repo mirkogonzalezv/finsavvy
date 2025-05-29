@@ -38,10 +38,17 @@ Proyecto portafolio para gestión financiera de caracter publico.
 - Pantalla de IA - Sugerencias y predicciones
 - Configuración de usuario y alertas
 
-# Plugins utilizados
+# Capturas de pantalla
 
-- go_router # manejo de rutas
-- flutter_bloc # gestión de estados
-- equatable # manejo de modelos de datos y estados
-- Isar # almacenamiento local
-- Firebase Store # Almacenamiento remoto
+Login View
+
+<img src="https://github.com/user-attachments/assets/7630c098-a411-4148-b98d-2be128df9d19" width="400" />
+
+<br>
+
+Home View
+
+<img src="https://github.com/user-attachments/assets/c672fd95-eb3d-477e-a34b-4741fe53ab26" width="400"/>
+
+
+
